@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'users.apps.UsersConfig',
-    'services.apps.ServicesConfig',
-    'order.apps.OrderConfig',
+    'posts.apps.ServicesConfig',
+    'reviews.apps.ReviewsConfig',
+    'chats.apps.ChatsConfig',
 ]
 
 MIDDLEWARE = [
