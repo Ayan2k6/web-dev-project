@@ -14,5 +14,14 @@ class User(AbstractUser):
     bio = models.TextField(max_length=500, blank=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
+    friends = models.ManyToManyField('self', blank=True, symmetrical=True)
+    subscriptions = models.ManyToManyField(
+        'self',
+        blank=True,
+        symmetrical=False,
+        related_name='followers',
+        limit_choices_to={'role': 'organization'}
+    )
+
     def __str__(self):
         return f"{self.username} ({self.role})"

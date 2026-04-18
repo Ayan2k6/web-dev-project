@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -143,3 +144,6 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
