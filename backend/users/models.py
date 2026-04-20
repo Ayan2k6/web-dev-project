@@ -8,6 +8,7 @@ class User(AbstractUser):
         ('teacher', 'Teacher'),
         ('organization', 'Organization'),
     )
+    email = models.EmailField(unique=False, blank=True, null=True)
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='student')
     faculty = models.CharField(max_length=100, blank=True, null=True)

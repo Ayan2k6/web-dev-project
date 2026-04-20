@@ -2,13 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
 
-class CustomUserAdmin(UserAdmin):
+class MyUserAdmin(UserAdmin):
     model = User
+    list_display = ['username', 'email', 'role', 'faculty', 'is_staff']
     fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('role', 'faculty', 'bio', 'avatar')}),
+        ('INFO', {'fields': ('role', 'faculty', 'bio', 'avatar')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {'fields': ('role', 'faculty', 'bio', 'avatar')}),
+        ('INFO', {'fields': ('role', 'faculty', 'bio', 'email')}),
     )
 
-admin.site.register(User, CustomUserAdmin)
+admin.site.register(User, MyUserAdmin)

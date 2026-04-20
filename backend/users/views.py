@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.db import models
 from django.shortcuts import get_object_or_404
 from .models import User
-from .serializer import UserSerializer
+from .serializer import UserSerializer, RegisterSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -71,27 +71,25 @@ def recommend_friends(request):
 
 
 @api_view(['POST'])
+@permission_classes([])
 def register_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    email = request.data.get('email')
-    role = request.data.get('role', 'student')
-    faculty = request.data.get('faculty', '')
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
 
-    avatar = request.FILES.get('avatar')
+        return Response({
+            "user": UserSerializer(user).data,
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        }, status=status.HTTP_201_CREATED)
 
-    if not username or not password:
-        return Response({"error": "Username and password are required"}, status=400)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if User.objects.filter(username=username).exists():
-        return Response({"error": "Username already taken"}, status=400)
-
-    user = User.objects.create_user(
-        username=username,
-        password=password,
-        email=email,
-        role=role,
-        faculty=faculty,
-        avatar=avatar
-    )
-    return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_me(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
