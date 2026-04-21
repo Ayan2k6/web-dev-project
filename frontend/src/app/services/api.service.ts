@@ -1,16 +1,13 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('access_token');
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+  readonly baseUrl = 'http://localhost:8000';
 
-  if (token) {
-    const cloned = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return next(cloned);
+  buildUrl(path: string): string {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    return `${this.baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
   }
-
-  return next(req);
-};
+}

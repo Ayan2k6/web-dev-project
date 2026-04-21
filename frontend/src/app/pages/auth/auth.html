@@ -1,1 +1,73 @@
-<p>auth works!</p>
+
+<section class="auth-screen">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">K</div>
+      <h1>KBTU Student Hub</h1>
+      <p>Социальная платформа университета</p>
+    </div>
+
+    <article class="card auth-card">
+      <div class="tabs">
+        <button [class.active]="mode === 'login'" (click)="switchMode('login')">Войти</button>
+        <button [class.active]="mode === 'register'" (click)="switchMode('register')">Регистрация</button>
+      </div>
+
+      <p class="ok" *ngIf="status" style="margin-bottom:14px">{{ status }}</p>
+
+      <form class="form-grid" *ngIf="mode === 'login'" (ngSubmit)="submitLogin()">
+        <label>
+          Имя пользователя
+          <input name="login-username" [(ngModel)]="loginForm.username" required autocomplete="username" placeholder="Введи username" />
+        </label>
+        <label>
+          Пароль
+          <input name="login-password" type="password" [(ngModel)]="loginForm.password" required autocomplete="current-password" placeholder="Введи пароль" />
+        </label>
+        <button type="submit" class="primary" [disabled]="loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Входим...' : 'Войти' }}
+        </button>
+        <p class="auth-meta">Если уже регистрировался — используй тот же username</p>
+        <p class="error" *ngIf="error">{{ error }}</p>
+      </form>
+
+      <form class="form-grid" *ngIf="mode === 'register'" (ngSubmit)="submitRegister()">
+        <label>
+          Имя пользователя
+          <input name="reg-username" [(ngModel)]="registerForm.username" required autocomplete="username" placeholder="Придумай username" />
+        </label>
+        <label>
+          Email
+          <input name="reg-email" type="email" [(ngModel)]="registerForm.email" autocomplete="email" placeholder="example@kbtu.kz" />
+        </label>
+        <label>
+          Пароль
+          <input name="reg-password" type="password" [(ngModel)]="registerForm.password" required minlength="8" autocomplete="new-password" placeholder="Минимум 8 символов" />
+        </label>
+        <label>
+          Роль
+          <select name="reg-role" [(ngModel)]="registerForm.role">
+            <option value="student">Студент</option>
+            <option value="teacher">Преподаватель</option>
+            <option value="organization">Организация</option>
+          </select>
+        </label>
+        <label>
+          Факультет
+          <input name="reg-faculty" [(ngModel)]="registerForm.faculty" placeholder="Например: ФИТ" />
+        </label>
+        <label>
+          О себе
+          <textarea name="reg-bio" rows="2" [(ngModel)]="registerForm.bio" placeholder="Пару слов о себе..."></textarea>
+        </label>
+        <button type="submit" class="primary" [disabled]="loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Создаём...' : 'Создать аккаунт' }}
+        </button>
+        <p class="auth-meta">Username должен быть уникальным · Пароль: минимум 8 символов</p>
+        <p class="error" *ngIf="error">{{ error }}</p>
+      </form>
+    </article>
+  </div>
+</section>

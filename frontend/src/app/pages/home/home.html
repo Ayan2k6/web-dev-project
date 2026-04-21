@@ -1,1 +1,80 @@
-<p>home works!</p>
+
+<section class="feed-layout">
+  <article class="card composer" *ngIf="me">
+    <div class="composer-head">
+      <h2>{{ editingPostId ? 'Редактировать пост' : 'Создать пост' }}</h2>
+      <p class="meta">{{ me.username }} · {{ me.role }}</p>
+    </div>
+
+    <form class="form-grid" (ngSubmit)="submitPost()">
+      <label>
+        Заголовок
+        <input name="post-title" [(ngModel)]="postForm.title" required placeholder="О чём хочешь написать?" />
+      </label>
+
+      <label>
+        Содержание
+        <textarea name="post-content" [(ngModel)]="postForm.content" rows="3" required placeholder="Поделись мыслями..."></textarea>
+      </label>
+
+      <label class="check" *ngIf="me.role === 'organization'">
+        <input name="post-official" type="checkbox" [(ngModel)]="postForm.is_official" />
+        Официальное объявление
+      </label>
+
+      <div class="row">
+        <button class="primary" type="submit">{{ editingPostId ? 'Сохранить' : 'Опубликовать' }}</button>
+        <button *ngIf="editingPostId" class="secondary" type="button" (click)="cancelEdit()">Отмена</button>
+      </div>
+
+      <p class="ok" *ngIf="actionMessage">{{ actionMessage }}</p>
+      <p class="error" *ngIf="actionError">{{ actionError }}</p>
+    </form>
+  </article>
+
+  <section class="stack" *ngIf="!loading; else loadingTpl">
+    <div class="empty-feed" *ngIf="posts.length === 0">
+      <h3>Лента пуста</h3>
+      <p>Подпишись на друзей или организации, чтобы видеть их посты</p>
+    </div>
+
+    <article class="card post" *ngFor="let post of posts">
+      <div class="post-top">
+        <div class="post-author-row">
+          <div class="post-avatar">{{ post.author.username[0].toUpperCase() }}</div>
+          <div>
+            <p class="author">{{ post.author.username }}</p>
+            <p class="meta">{{ post.created_at | date:'d MMM, HH:mm' }}</p>
+          </div>
+        </div>
+        <span class="badge" *ngIf="post.is_official">Официально</span>
+      </div>
+
+      <h3>{{ post.title }}</h3>
+      <p class="content">{{ post.content }}</p>
+
+      <div class="actions">
+        <button (click)="toggleLike(post)">❤ {{ post.likes_count }}</button>
+        <button (click)="toggleComments(post.id)">💬 {{ post.comments_count }}</button>
+        <button *ngIf="canManage(post)" (click)="startEdit(post)">✏ Изменить</button>
+        <button *ngIf="canManage(post)" class="danger" (click)="deletePost(post)">Удалить</button>
+      </div>
+
+      <div class="comments" *ngIf="commentsVisible[post.id]">
+        <article class="comment" *ngFor="let comment of commentsByPost[post.id] || []">
+          <strong>{{ comment.author }}</strong>
+          <p>{{ comment.text }}</p>
+        </article>
+
+        <div class="comment-input-row">
+          <input [name]="'comment-'+post.id" [(ngModel)]="commentText[post.id]" placeholder="Написать комментарий..." />
+          <button (click)="addComment(post.id)">→</button>
+        </div>
+      </div>
+    </article>
+  </section>
+</section>
+
+<ng-template #loadingTpl>
+  <div class="card" style="text-align:center;padding:32px;color:var(--text-muted)">Загрузка ленты...</div>
+</ng-template>

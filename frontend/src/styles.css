@@ -1,1 +1,140 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+
+:root {
+  --bg: #f7f8fc;
+  --surface: #ffffff;
+  --surface-soft: #f0f3ff;
+  --line: #e4e8f0;
+  --text: #0f1b2d;
+  --text-muted: #6b7a99;
+  --accent: #4361ee;
+  --accent-hover: #3451d1;
+  --accent-soft: #eef1ff;
+  --orange: #f77f00;
+  --green: #0ea570;
+  --red: #e03131;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  letter-spacing: 0.01em;
+  padding-bottom: 72px;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(15, 27, 45, 0.05);
+}
+
+.form-grid { display: grid; gap: 14px; }
+
+label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+input, textarea, select {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color 150ms, box-shadow 150ms;
+  width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+}
+
+textarea { resize: vertical; }
+
+button { font: inherit; cursor: pointer; }
+
+button.primary {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: #fff;
+  background: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 150ms, transform 100ms, box-shadow 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button.primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(67,97,238,0.25); }
+button.primary:active { transform: translateY(0); }
+button.primary:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+button.secondary {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 16px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  transition: background 150ms, border-color 150ms;
+}
+button.secondary:hover { background: var(--surface-soft); border-color: var(--accent); }
+
+button.ghost {
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-weight: 500;
+  transition: 140ms ease;
+}
+button.ghost:hover { background: var(--surface-soft); border-color: var(--accent); }
+
+.row { display: flex; align-items: center; gap: 10px; }
+.meta { color: var(--text-muted); font-size: 0.85rem; }
+.error { color: var(--red); font-size: 0.875rem; }
+.ok { color: var(--green); font-size: 0.875rem; }
+.badge {
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

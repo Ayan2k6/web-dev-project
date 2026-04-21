@@ -1,0 +1,53 @@
+<section class="chat-grid">
+  <aside class="card sidebar">
+    <h3>Conversations</h3>
+
+    <label>
+      Start a new chat
+      <div class="row">
+        <select [(ngModel)]="selectedUserId" name="chat-user">
+          <option [ngValue]="null">Select user</option>
+          <option *ngFor="let user of users" [ngValue]="user.id">{{ user.username }} ({{ user.role }})</option>
+        </select>
+        <button (click)="createChat()">Create</button>
+      </div>
+    </label>
+
+    <p class="ok" *ngIf="message">{{ message }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <button
+      class="chat-item"
+      *ngFor="let chat of chats"
+      [class.active]="chat.id === selectedChat?.id"
+      (click)="openChat(chat)"
+    >
+      <strong>{{ chat.display_name }}</strong>
+      <small>{{ chat.created_at | date:'short' }}</small>
+    </button>
+  </aside>
+
+  <article class="card messages" *ngIf="selectedChat; else emptyState">
+    <header>
+      <h3>{{ selectedChat.display_name }}</h3>
+      <p class="meta">{{ messages.length }} messages</p>
+    </header>
+
+    <div class="message-list">
+      <article class="msg" *ngFor="let msg of messages">
+        <strong>{{ msg.sender.username }}</strong>
+        <p>{{ msg.text }}</p>
+        <span class="meta">{{ msg.created_at | date:'shortTime' }}</span>
+      </article>
+    </div>
+
+    <div class="row">
+      <input [(ngModel)]="draft" (keyup.enter)="sendMessage()" placeholder="Write message" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </article>
+</section>
+
+<ng-template #emptyState>
+  <div class="card">Create or open a chat to start messaging.</div>
+</ng-template>

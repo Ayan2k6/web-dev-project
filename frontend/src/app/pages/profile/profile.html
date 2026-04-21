@@ -1,1 +1,85 @@
-<p>profile works!</p>
+
+<div *ngIf="!me" style="padding:32px;text-align:center;color:var(--text-muted)">Загрузка профиля...</div>
+<section class="network-layout" *ngIf="me">
+  <article class="card profile-card" style="padding:0">
+    <div class="profile-banner"></div>
+    <div class="profile-body">
+      <div class="profile-avatar">{{ me.username[0].toUpperCase() }}</div>
+      <p class="profile-name">{{ me.username }}</p>
+      <p class="meta">{{ me.role | titlecase }} · {{ me.email || 'no email' }}</p>
+
+      <div class="profile-detail">
+        <div class="detail-row" *ngIf="me.faculty">
+          <span class="label">Факультет</span>
+          <span>{{ me.faculty }}</span>
+        </div>
+        <div class="detail-row" *ngIf="me.bio">
+          <span class="label">О себе</span>
+          <span>{{ me.bio }}</span>
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat">
+          <div class="stat-num">{{ me.friends.length }}</div>
+          <div class="stat-label">Друзья</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">{{ me.subscriptions.length }}</div>
+          <div class="stat-label">Подписки</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="card" *ngIf="recommendations.length">
+    <p class="section-title">Рекомендации</p>
+    <p class="ok" *ngIf="message">{{ message }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <div class="list">
+      <div class="user-item" *ngFor="let user of recommendations">
+        <div class="user-info">
+          <div class="user-avatar">{{ user.username[0].toUpperCase() }}</div>
+          <div>
+            <p class="user-name">{{ user.username }}</p>
+            <p class="meta">{{ user.role }} · {{ user.faculty || 'Нет факультета' }}</p>
+          </div>
+        </div>
+        <div class="user-actions">
+          <button *ngIf="user.role !== 'organization'" [class.active-btn]="isFriend(user.id)" (click)="toggleFriend(user)">
+            {{ isFriend(user.id) ? 'Друг ✓' : 'Добавить' }}
+          </button>
+          <button *ngIf="user.role === 'organization'" [class.active-btn]="isSubscribed(user.id)" (click)="toggleSubscription(user)">
+            {{ isSubscribed(user.id) ? 'Подписан ✓' : 'Подписаться' }}
+          </button>
+          <button (click)="startChat(user)">Написать</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <p class="section-title">Все пользователи</p>
+    <div class="list">
+      <div class="user-item" *ngFor="let user of allUsers">
+        <div class="user-info">
+          <div class="user-avatar">{{ user.username[0].toUpperCase() }}</div>
+          <div>
+            <p class="user-name">{{ user.username }}</p>
+            <p class="meta">{{ user.role }} · {{ user.faculty || 'Нет факультета' }}</p>
+          </div>
+        </div>
+        <div class="user-actions" *ngIf="!isSelf(user.id)">
+          <button *ngIf="user.role !== 'organization'" [class.active-btn]="isFriend(user.id)" (click)="toggleFriend(user)">
+            {{ isFriend(user.id) ? 'Друг ✓' : 'Добавить' }}
+          </button>
+          <button *ngIf="user.role === 'organization'" [class.active-btn]="isSubscribed(user.id)" (click)="toggleSubscription(user)">
+            {{ isSubscribed(user.id) ? 'Подписан ✓' : 'Подписаться' }}
+          </button>
+          <button (click)="startChat(user)">Чат</button>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
